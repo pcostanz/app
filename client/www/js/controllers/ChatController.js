@@ -10,7 +10,9 @@ angular.module('rehash-app')
     $mdToast,
     $timeout,
     chatService,
-    $rootScope
+    $rootScope,
+    $ionicPopover,
+    scoreboardService
   ) {
 
     $scope.gameState = {
@@ -24,6 +26,13 @@ angular.module('rehash-app')
       'isJudge'     : false,
       'tweet'       : null
     };
+
+    scoreboardService.initialize($scope);
+
+    $scope.toggleIonicModal = function() {
+      console.log(scoreboardService);
+      scoreboardService.openScoreboard();
+    }
 
     $rootScope.nickname = $stateParams.nickname;
 

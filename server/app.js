@@ -41,6 +41,7 @@ var gameStarted = false;
 var hash_tag_by_user = null;
 var numHashtags = null;
 var scores = [];
+var scoreboard = [];
 var chat = [];
 var lastRoundWinner = null;
 
@@ -170,6 +171,16 @@ io.on('connection', function (socket) {
     console.log('end round', data);
     lastRoundWinner = {username: data.username, hashtag: data.hashtag};
     hashTags = [];
+
+    scoreboard.unshift(data);
+
+    socket.broadcast.emit('update scoreboard', {
+      scoreboard: scoreboard
+    });
+
+    socket.emit('update scoreboard', {
+      scoreboard: scoreboard
+    });
 
     scores.forEach(function (userScore) {
       if (userScore.username === data.username) {

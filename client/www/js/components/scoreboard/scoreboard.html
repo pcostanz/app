@@ -1,0 +1,15 @@
+<ion-modal-view>
+  <ion-header-bar>
+    <h1 class="title">Scoreboard Bitches</h1>
+  </ion-header-bar>
+  <ion-content scroll="false" on-swipe-down="testSwipeDown()" class="full-height">
+    <ion-slide-box show-pager="true" class="scoreboard-slider">
+      <ion-slide ng-repeat="round in $root.scoreboard.scoreboard track by $index">
+        <div class="box blue"><h1>round {{$root.scoreboard.scoreboard.length - $index}}</h1></div>
+        <div>Judge: {{round.judge}}</div>
+        <div>Winner: {{round.username}}</div>
+        <div>Hashtag: {{round.hashtag.content}}</div>
+      </ion-slide>
+    </ion-slide-box>
+  </ion-content>
+</ion-modal-view>

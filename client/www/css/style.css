@@ -147,4 +147,14 @@
   padding-right: 5px;
 }
 
+.full-height {
+ height: 100%;
+}
 
+.full-height > div {
+  height: calc(100% - 42px);
+}
+
+.scoreboard-slider {
+  height: 100%;
+}

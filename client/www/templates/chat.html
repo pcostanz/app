@@ -19,7 +19,15 @@
 
   <chat></chat>
 
-  <ion-content>
+  <ion-content class="full-height">
+
+    <md-button class="md-fab md-fab-bottom-right"
+               aria-label="Eat cake"
+               ng-click="toggleIonicModal()">
+      Test
+      <!--<md-icon md-svg-src="img/icons/cake.svg">Test</md-icon>-->
+    </md-button>
+
     <md-content ng-show="gameState.lastRoundWinner"
                 ng-swipe-left="gameState.lastRoundWinner = false">
       <md-card>
@@ -112,5 +120,5 @@
                    type="submit">Start Game</md-button>
       </div>
     </div>
-    </ion-content>
+  </ion-content>
  </ion-view>

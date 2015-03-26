@@ -1,0 +1,12 @@
+<div class="avatar-container">
+  <div class="avatar"
+       ng-repeat="player in players track by $index"
+       ref="player-id-{{::player.id}}"
+       ng-click="increaseScore(player.id)"
+       ng-style="player.style">
+    <img class="avatar-image"
+         ng-src="http://api.adorable.io/avatars/50/{{::player.email}}"
+         alt="" />
+    <div class="avatar-score">{{player.score}}</div>
+  </div>
+</div>

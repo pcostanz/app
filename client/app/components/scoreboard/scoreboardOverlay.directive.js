@@ -8,7 +8,8 @@ angular.module('rehash-app')
     $interval,
     $sanitize,
     $ionicSideMenuDelegate,
-    $window) {
+    $window,
+    gameService) {
 
     return {
       'restrict'    : 'E',
@@ -63,64 +64,80 @@ angular.module('rehash-app')
           positionScoreboardAvatars();
         });
 
+        scope.scoreboard = [];
 
-        scope.players = [
-          {
-            'email' : 'test@test.com',
-            'score' : 2,
-            'id'    : 1
-          },
-          {
-            'email' : 'randomshit389042@test.com',
-            'score' : 4,
-            'id'    : 2
-          },
-          {
-            'email' : 'helloworld@test.com',
-            'score' : 9,
-            'id'    : 3
-          },
-          {
-            'email' : '912301290321@test.com',
-            'score' : 1,
-            'id'    : 4
-          },
-          {
-            'email' : 'anotheremailaddress@test.com',
-            'score' : 5,
-            'id'    : 5
+        scope.$watch(function() { return gameService.scoreboard; },
+          function (newScoreboard) {
+
+            // this is funky, we were relying on updating something in the scoreboard
+            // array...this means we probably need to do some data manipulation
+
+            if (newScoreboard.length) {
+              positionScoreboardAvatars(newScoreboard);
+            }
           }
-        ];
+        );
 
-        var positionScoreboardAvatars = function() {
+        // probably should run this on a landscape mode switch right?
+        var centerScoreboard = function() {
           var elemHeight = elem[0].offsetHeight;
-          var rankedPlayers = angular.copy(scope.players).sort(compare);
-          var avatarHeight = (elemHeight / rankedPlayers.length); // includes margin
+          elem.css('bottom', ((windowHeight - elemHeight) / 2) + 'px');
+        };
 
-          angular.forEach(rankedPlayers, function(player, index) {
-            var playerIndex = player.id - 1;
+        var positionScoreboardAvatars = function(newScoreboard) {
 
-            var currentOffset = avatarHeight * playerIndex;
-            var newOffset = avatarHeight * index;
+          if (!gameService.currentGameInProgress()) {
+            return;
+          }
 
+          // if the scoreboard hasn't been initialized, do it with the new data
+          if (scope.scoreboard.length === 0) {
+            scope.scoreboard = angular.copy(newScoreboard);
+
+            // need to set an id to track the sorted list back to the original
+            // object used to construct the scoreboard, we'll also store the
+            // style coordinates on this object and modify them from this method
+            angular.forEach(scope.scoreboard, function(player, index) {
+              player.id = index;
+              player.styles = {};
+            });
+          }
+
+          // @TODO - move this into the service
+
+          var sortedScoreboard = angular.copy(scope.scoreboard).sort(sortScore);
+          var elemHeight = elem[0].offsetHeight;
+          var avatarHeight = (elemHeight / sortedScoreboard.length); // includes margin
+
+          angular.forEach(sortedScoreboard, function(player, index) {
+            console.log(player);
+            var scoreboardIndex = player.id;
+            var currentOffset = 65 * scoreboardIndex;
+            var newOffset = 65 * index;
             var translateDistance = newOffset - currentOffset;
 
+            console.log(currentOffset, newOffset);
 
-            scope.players[playerIndex].style = {'transform': 'translateY(' + translateDistance + 'px) translateX(50px)'};
+            scope.scoreboard[scoreboardIndex].score = player.score;
+            scope.scoreboard[scoreboardIndex].styles = {'transform': 'translateY(' + translateDistance + 'px)'};
           });
 
-          // utility sorting function
-          function compare(a,b) {
+          // utility sorting function for scores
+          function sortScore(a,b) {
             if (a.score > b.score) return -1;
             if (a.score < b.score) return 1;
             return 0;
           }
         };
 
-        $timeout(function() {
-          positionScoreboardAvatars();
-        })
+        var revealAvatars = function() {
+          elem.addClass('visible');
+        };
 
+        $timeout(function() {
+          centerScoreboard();
+          revealAvatars();
+        });
 
       }
     };

@@ -27,7 +27,7 @@ angular.module('rehash-app')
             'name'      : $rootScope.username,
             'popToast'  : true,
             'showCount' : true
-          }
+          };
 
           chatService.sendMessage(messageData);
         };

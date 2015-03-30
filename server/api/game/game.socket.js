@@ -13,6 +13,7 @@ var hash_tag_by_user = null;
 var numHashtags = null;
 var scores = [];
 var lastRoundWinner = null;
+var roundResults = [];
 
 Array.prototype.remove = function () {
   var what, a = arguments, L = a.length, ax;
@@ -140,6 +141,19 @@ Array.prototype.remove = function () {
           userScore.score++;
         }
       });
+
+      roundResults.unshift(data);
+
+      socket.broadcast.emit('update scores', {
+        roundResults: roundResults,
+        scoreboard: scores
+      });
+
+      socket.emit('update scores', {
+        roundResults: roundResults,
+        scoreboard: scores
+      });
+
       console.log("scores: ", scores);
       startRound(socket);
     });

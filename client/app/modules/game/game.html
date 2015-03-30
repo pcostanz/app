@@ -7,28 +7,10 @@
     <ion-nav-view class="overflow-override" name="menuContent" animation="slide-left-right"></ion-nav-view>
   </ion-pane>
 
-  <ion-side-menu side="left"
-                 width="250">
-    <header class="bar bar-header bar-stable">
-      <h1 class="title">Scoreboard</h1>
-    </header>
-    <ion-content class="has-header">
-      <ion-list>
-        <ion-item>
-          @TODO: Port
-        </ion-item>
-        <ion-item>
-          From
-        </ion-item>
-        <ion-item>
-          Old
-        </ion-item>
-        <ion-item>
-          App
-        </ion-item>
-      </ion-list>
-    </ion-content>
-  </ion-side-menu>
+  <!--LEFT SIDENAV-->
+  <scoreboard-list></scoreboard-list>
 
+  <!--RIGHT SIDENAV-->
   <chat></chat>
+
 </ion-side-menus>

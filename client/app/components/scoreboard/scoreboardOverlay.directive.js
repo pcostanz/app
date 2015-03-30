@@ -4,6 +4,7 @@ angular.module('rehash-app')
   .directive('scoreboardOverlay', function(
     $rootScope,
     chatService,
+    gameService,
     $timeout,
     $interval,
     $sanitize,
@@ -22,13 +23,11 @@ angular.module('rehash-app')
         // DOM manipulation needs to happen inside a $timeout so the digest cycle
         // can finish processing ng-repeat items, same applies to $watch listeners.
         $timeout(function() {
-          var flung = false;
-          var avatars = elem.children();
-
           scope.$watch(function() { return $ionicSideMenuDelegate.$getByHandle('game').getOpenRatio(); },
             function (ratio) {
+              var avatars = elem.children();
+
               if (ratio === 1) {
-                flung = true;
                 $timeout(function() {
                   angular.forEach(avatars, function(avatar) {
                     var xFling = windowWidth + 50;
@@ -37,7 +36,7 @@ angular.module('rehash-app')
                       .css('transform', 'translateX(' + xFling + 'px) translateY(' + yFling + 'px) rotate(180deg)');
                   });
                 }, 25);
-              } else if (ratio <= 0 && flung === true) {
+              } else if (ratio <= 0) {
                 angular.forEach(avatars, function(avatar) {
 
                   // @TODO - Patrick: This wont fly when the scoreboard needs to rearrange itself
@@ -49,79 +48,52 @@ angular.module('rehash-app')
           );
         });
 
-        //$interval(function() {
-        //  scope.increaseScore(Math.floor((Math.random() * 4) + 1 ));
-        //}, 350);
+        // @TODO: This was working as a proof of concept demo, need to re-implement so that
+        // scoreboard posiion state can be properly tracked and calculated when the scoreboard
+        // object is being overwritten by service update changes that will nuke and rewrite
+        // scope.scoreboard
 
-        scope.increaseScore = function(id) {
-          scope.players[id - 1].score++;
-          scope.$broadcast('scoreboard updated');
-        };
+        //var positionScoreboardAvatars = function() {
+        //  var elemHeight = elem[0].offsetHeight;
+        //  var rankedPlayers = angular.copy(scope.players).sort(sortScoreboard);
+        //  var avatarHeight = (elemHeight / rankedPlayers.length); // includes margin
+        //
+        //  angular.forEach(rankedPlayers, function(player, index) {
+        //    var playerIndex = player.id - 1;
+        //
+        //    var currentOffset = avatarHeight * playerIndex;
+        //    var newOffset = avatarHeight * index;
+        //
+        //    var translateDistance = newOffset - currentOffset;
+        //
+        //
+        //    scope.players[playerIndex].style = {'transform': 'translateY(' + translateDistance + 'px) translateX(50px)'};
+        //  });
+        //
+        //  // utility sorting function
+        //  function sortScoreboard(a,b) {
+        //    if (a.score > b.score) return -1;
+        //    if (a.score < b.score) return 1;
+        //    return 0;
+        //  }
+        //};
 
-        scope.$on('scoreboard updated', function() {
-          console.log('scoreboard updated');
-          positionScoreboardAvatars();
-        });
-
-
-        scope.players = [
-          {
-            'email' : 'test@test.com',
-            'score' : 2,
-            'id'    : 1
-          },
-          {
-            'email' : 'randomshit389042@test.com',
-            'score' : 4,
-            'id'    : 2
-          },
-          {
-            'email' : 'helloworld@test.com',
-            'score' : 9,
-            'id'    : 3
-          },
-          {
-            'email' : '912301290321@test.com',
-            'score' : 1,
-            'id'    : 4
-          },
-          {
-            'email' : 'anotheremailaddress@test.com',
-            'score' : 5,
-            'id'    : 5
-          }
-        ];
-
-        var positionScoreboardAvatars = function() {
+        var centerScoreboard = function() {
           var elemHeight = elem[0].offsetHeight;
-          var rankedPlayers = angular.copy(scope.players).sort(compare);
-          var avatarHeight = (elemHeight / rankedPlayers.length); // includes margin
-
-          angular.forEach(rankedPlayers, function(player, index) {
-            var playerIndex = player.id - 1;
-
-            var currentOffset = avatarHeight * playerIndex;
-            var newOffset = avatarHeight * index;
-
-            var translateDistance = newOffset - currentOffset;
-
-
-            scope.players[playerIndex].style = {'transform': 'translateY(' + translateDistance + 'px) translateX(50px)'};
-          });
-
-          // utility sorting function
-          function compare(a,b) {
-            if (a.score > b.score) return -1;
-            if (a.score < b.score) return 1;
-            return 0;
-          }
+          elem.css('bottom', ((windowHeight - elemHeight) / 2) + 'px');
         };
 
-        $timeout(function() {
-          positionScoreboardAvatars();
-        })
+        scope.$watch(function() { return gameService.scoreboard; },
+          function (newScoreboard) {
+            if (newScoreboard.length) {
+              scope.scoreboard = newScoreboard;
 
-
+              $timeout(function() {
+                centerScoreboard();
+              });
+            }
+          }
+        );
       }
     };
   });

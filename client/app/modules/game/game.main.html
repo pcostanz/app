@@ -1,11 +1,21 @@
-<ion-view title="ReHash">
+<ion-view class="overflow-override" title="ReHash">
   <ion-nav-buttons side="left">
     <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
   </ion-nav-buttons>
-  <ion-content class="has-header game-home-content">
-    <button class="game-chat-toggle button button-outline button-positive" menu-toggle="right">
-      <i class="icon ion-chatbubbles"></i>
-    </button>
+  <ion-content class="overflow-override has-header game-home-content">
+
+    <div class="game-chat-toggle">
+      <button class="button button-outline button-positive"
+              menu-toggle="right"
+              ng-click="clearUnreadChats()">
+        <i class="icon ion-chatbubbles"></i>
+        <span class="game-chat-toggle-indicator"
+              ng-show="$root.unreadChats > 0">{{$root.unreadChats}}</span>
+      </button>
+    </div>
+
+    <scoreboard-overlay></scoreboard-overlay>
+
     <div ng-show="!gameState.gameStarted">
       <ul class="list" ng-show="!gameState.gameStarted">
         <li ng-repeat="user in gameState.users track by $index"

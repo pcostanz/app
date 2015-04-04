@@ -1,0 +1,9 @@
+<div class="avatar-container visible">
+  <div class="avatar"
+       ng-repeat="player in scoreboard track by $index">
+    <img class="avatar-image"
+         ng-src="http://api.adorable.io/avatars/50/{{player.username}}"
+         alt="" />
+    <div class="avatar-score">{{player.score}}</div>
+  </div>
+</div>

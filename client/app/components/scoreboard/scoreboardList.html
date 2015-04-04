@@ -1,0 +1,16 @@
+<ion-side-menu side="left"
+               width="250">
+  <header class="bar bar-header bar-stable">
+    <h1 class="title">Scoreboard</h1>
+  </header>
+  <ion-content class="has-header">
+    <ion-list>
+      <ion-item ng-repeat="player in scoreboard track by $index">
+        {{player.username}} - {{player.score}}
+      </ion-item>
+      <ion-item ng-if="!scoreboard">
+        Start a game first
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-side-menu>

@@ -30,12 +30,9 @@ angular.module('rehash-app')
 
     console.log('$rootScope.username', $rootScope.username);
 
-    // $scope.toggleChat = function () {
-    //   $mdSidenav('right').toggle()
-    //     .then(function() {
-    //       $rootScope.unreadChats = 0;
-    //     });
-    // };
+     $scope.clearUnreadChats = function () {
+       $rootScope.unreadChats = 0;
+     };
 
     socket.on('connect', function () {
       //Add user

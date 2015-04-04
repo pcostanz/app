@@ -36,9 +36,10 @@ $ionicons-font-path: "/bower_components/ionic/fonts";
 .game-home-content {
 
   > div {
-    height: calc(100% - 5px); //fudging
+    height: calc(100%); // might need to do some calc here
+    padding: 20px;
   }
-}
+} // .game-home-content
 
 // .login-logo {
 //   padding-top: 75px;
@@ -193,5 +194,59 @@ $ionicons-font-path: "/bower_components/ionic/fonts";
    font-weight: bold;
    padding-right: 5px;
 }
+.avatar-container {
+  display: flex;
+  bottom: 0;
+  flex-direction: column;
+  left: -20px;
+  position: absolute;
+  //width: 120px;
+  z-index: 999;
+  visibility: hidden;
+
+  &.visible {
+    visibility: visible;
+  }
+} // .avatar-container
+
+.avatar {
+  backface-visibility: hidden;
+  height: 50px;
+  margin-bottom: 15px;
+  position: relative;
+  transition: all 300ms linear; // @TODO: pick a transition timing function
+  width: 50px;
+
+  //bottom: 0;
+  //left: 0;
+  //position: absolute
+  //visibility: hidden;
+
+  .avatar-image {
+    border: 2px solid black;
+    border-radius: 50%;
+  }
+
+  .avatar-score {
+    background: white;
+    border: 2px solid black;
+    border-radius: 50%;
+    bottom: -10px;
+    color: black;
+    font-weight: 500;
+    height: 20px;
+    line-height: 17px;
+    position: absolute;
+    right: -6px;
+    text-align: center;
+    width: 20px;
+  }
+} // .avatar
 
 
+// Need to be able to override the overflow: hidden default on a lot of the navigation
+// container to achieve the effect of allowing the gravatar scoreboard to overlap into
+// the scoreboard left navigation
+.overflow-override {
+  overflow: visible !important;
+}

@@ -71,7 +71,7 @@ angular.module('rehash-app')
     });
 
     socket.on('send hashtag to judge', function (data) {
-      if ($rootScope.username === $scope.gameState.judge.username.username) {
+      if ($rootScope.username === $scope.gameState.judge.username) {
         console.log('judge received hashtag', data);
         $scope.gameState.hashTags.push(data);
       }
@@ -104,17 +104,13 @@ angular.module('rehash-app')
     };
 
     // sets up round and check for who is the judge
-    socket.on('start round', function (data, lastRound) {
-      console.log('you are: ', $rootScope.username);
+    socket.on('start round', function (data) {
       console.log('data received "start round"', data);
       $scope.gameState.submitUsers = [];
-      if (lastRound) {
-        $scope.gameState.lastRoundWinner = lastRound.lastRoundWinner;
-        console.log('last round', lastRound);
-      }
+      var currentRound = data.currentRound;
 
-      if (lastRound && $scope.gameState.lastRoundWinner) {
-        var winner = $scope.gameState.lastRoundWinner;
+      if (currentRound.winner) {
+        var winner = $scope.gameState.winner;
 
         chatService.sendMessage({
            'body'     : 'Winner: ' + winner.username + ' - Tweet: #' + winner.submittedHashtag.hashtag,
@@ -123,10 +119,9 @@ angular.module('rehash-app')
       }
 
       $scope.gameState.voteEnabled = false;
-      $scope.gameState.judge = data.judge;
+      $scope.gameState.judge = currentRound.judge;
       $scope.gameState.hasntVoted = true;
       $scope.gameState.gameStarted = true;
-
       console.log('username', $rootScope.username, 'judge', $scope.gameState.judge.username);
 
       if ($rootScope.username === $scope.gameState.judge.username) {
@@ -134,12 +129,12 @@ angular.module('rehash-app')
         $scope.gameState.isJudge = true;
         console.log('your are the judge');
       } else {
-        console.log('user tags:', data.users[0].hashtags);
-        $scope.gameState.hashTags = data.users[0].hashtags;
+        console.log('user tags:', currentRound.users[0].hashtags);
+        $scope.gameState.hashTags = currentRound.users[0].hashtags;
         $scope.gameState.isJudge = false;
         console.log('judge is ', $scope.gameState.judge);
       }
-      $scope.gameState.tweet = data.tweet;
+      $scope.gameState.tweet = currentRound.tweet;
     });
 
     // Player submits hashtag

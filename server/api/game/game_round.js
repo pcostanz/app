@@ -6,7 +6,7 @@ function GameRound() {
   this.tweet = null;
   this.judge = null;
   this.users = [];
-  this.lastRoundWinner = null;
+  this.winner = null;
 }
 
 GameRound.newRound = function (users, tweet, judge, callback) {
@@ -24,7 +24,8 @@ GameRound.prototype.userSubmitHashtag = function (submitUser, userHashtag) {
     if (user.username === submitUser.username) {
       this.users[index].submittedHashtag = userHashtag;
     } else {
-      console.log('couldnt find user that submitted hashtag')
+      // console.log('couldnt find user that submitted hashtag');
+      // TODO throw error for tracking purposes
     }
   }, this);
   // this.users[0].submittedHashtag = "fuck"
@@ -49,7 +50,7 @@ GameRound.prototype.submitJudgeVote = function (voteHashtag) {
     self.users,
     {submittedHashtag: voteHashtag}
   );
-  self.lastRoundWinner = self.users[winnerIndex];
+  self.winner = self.users[winnerIndex];
   return true;
 }
 

@@ -13,14 +13,7 @@ angular.module('rehash-app').factory('gameService',
     };
 
     socket.on('start round', function(data) {
-      gameService.scoreboard = angular.copy(data.scores).sort(sortScoreboard);
-    });
-
-    socket.on('update scores', function(data) {
-      if (data.scores) {
-        gameService.scoreboard = gameService.scoreboard = angular.copy(data.scores).sort(sortScoreboard);
-      }
-      gameService.roundResults = data.roundResults;
+      gameService.scoreboard = angular.copy(data.scoreboard).sort(sortScoreboard);
     });
 
     gameService.currentGameInProgress = function() {

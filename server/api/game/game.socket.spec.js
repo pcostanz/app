@@ -155,7 +155,7 @@ describe("Game", function () {
         r.userSubmitHashtag(users[1], {hashtag: "test tag"});
         r.userSubmitHashtag(users[2], {hashtag: "test tag1"});
         r.submitJudgeVote({hashtag: "test tag"});
-        assert.equal(r.lastRoundWinner.username, 'john');
+        assert.equal(r.winner.username, 'john');
         done();
       });
     });

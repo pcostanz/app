@@ -5,6 +5,7 @@
   <ion-content class="overflow-override has-header game-home-content">
 
     <div class="game-chat-toggle">
+      <span ng-if="roundNumber > 0">{{roundNumber}}</span>
       <button class="button button-outline button-positive"
               menu-toggle="right"
               ng-click="clearUnreadChats()">

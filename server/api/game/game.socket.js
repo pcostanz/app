@@ -12,7 +12,8 @@ exports.register = function(socket) {
     var gameState = {
       currentRound: game.currentRound(),
       lastRound: game.lastRound(),
-      scoreboard: game.scoreboard()
+      scoreboard: game.scoreboard(),
+      numOfCurrentRound: game.numOfCurrentRound()
     }
     socket.emit('start round', gameState);
     socket.broadcast.emit('start round', gameState);

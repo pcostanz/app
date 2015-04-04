@@ -8,6 +8,16 @@ var usernames = [],
     currentGame = null;
 
 exports.register = function(socket) {
+  function startRound(game) {
+    var gameState = {
+      currentRound: game.currentRound(),
+      lastRound: game.lastRound(),
+      scoreboard: game.scoreboard()
+    }
+    socket.emit('start round', gameState);
+    socket.broadcast.emit('start round', gameState);
+  }
+
   socket.on('submit hashtag', function (user, hashtag) {
     currentGame.currentRound().userSubmitHashtag(user, hashtag);
     socket.broadcast.emit(
@@ -29,18 +39,19 @@ exports.register = function(socket) {
     console.log(usernames);
     Game.startGame(usernames, function (game) {
       currentGame = game;
-      socket.broadcast.emit('start round', game.currentRound());
-      socket.emit('start round', game.currentRound());
+      startRound(currentGame);
       // socket.in(socket.user.uuid).emit('new_msg', {msg: 'hello'});
     });
   });
 
   socket.on('join lobby', function (username) {
-    console.log('user joined lobby:', username, socket.username);
     // add the client's username to the global list
     var user = username;
     socket.username = user;
     usernames.push(user);
+
+    console.log('user joined lobby:', username, socket.username);
+    // TODO - socket username seems like some weird shit
 
     socket.emit('user joined', {
       user: user,
@@ -56,8 +67,7 @@ exports.register = function(socket) {
     var lastRound = currentGame.currentRound();
     currentGame.newRound(function(game) {
       currentGame = game;
-      socket.emit('start round', game.currentRound(), lastRound);
-      socket.broadcast.emit('start round', game.currentRound(), lastRound);
+      startRound(currentGame);
     });
   });
 

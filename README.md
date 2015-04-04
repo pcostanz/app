@@ -1,6 +1,8 @@
 
 # Rehash
 
+[![Build Status](https://travis-ci.org/rehash-app/app.svg?branch=master)](https://travis-ci.org/rehash-app/app)
+
 ## How to use
 
 Requires mongodb: http://docs.mongodb.org/manual/tutorial/install-mongodb-on-os-x/

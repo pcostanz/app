@@ -8,7 +8,8 @@ angular.module('rehash-app')
     $timeout,
     chatService,
     $state,
-    $rootScope) {
+    $rootScope,
+    gameService) {
 
     console.log('GameCtrl init');
 
@@ -21,7 +22,8 @@ angular.module('rehash-app')
       'judge'       : null,
       'voteEnabled' : false,
       'isJudge'     : false,
-      'tweet'       : null
+      'tweet'       : null,
+      'currentRound': 0
     };
 
     $rootScope.username = $stateParams.username;
@@ -29,6 +31,12 @@ angular.module('rehash-app')
     console.log('stateparms', $stateParams);
 
     console.log('$rootScope.username', $rootScope.username);
+
+    $scope.$watch(function() { return gameService.roundNumber; },
+      function (newVal) {
+        $scope.roundNumber = newVal;
+      }
+    );
 
      $scope.clearUnreadChats = function () {
        $rootScope.unreadChats = 0;

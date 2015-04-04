@@ -53,6 +53,10 @@ Game.prototype.currentRound = function () {
   return this.rounds[this.rounds.length - 1];
 }
 
+Game.prototype.numOfCurrentRound = function () {
+  return this.rounds.length;
+}
+
 Game.prototype.newRound = function (callback) {
   var self = this;
   if ((self.users.length - 1) === self.currentJudgeIndex) {

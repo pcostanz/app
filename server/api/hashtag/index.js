@@ -7,7 +7,6 @@ var config = require('../../config/environment');
 
 var router = express.Router();
 
-router.get('/tweets', controller.tweets);
-router.get('/tweets/:id', controller.show);
+router.get('/hashtags', controller.hashtags);
 
 module.exports = router;
